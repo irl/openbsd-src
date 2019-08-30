@@ -82,6 +82,7 @@ pseudo-device	msts	1	# MSTS line discipline
 pseudo-device	endrun	1	# EndRun line discipline
 pseudo-device	vnd	4	# vnode disk devices
 pseudo-device	ksyms	1	# kernel symbols device
+pseudo-device	kiss	1	# KISS TNC line discipline
 
 # clonable devices
 pseudo-device	bpfilter	# packet filter

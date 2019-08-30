@@ -545,6 +545,7 @@ pseudo-device pty: tty
 pseudo-device nmea: tty
 pseudo-device msts: tty
 pseudo-device endrun: tty
+pseudo-device kiss: tty
 
 pseudo-device loop: ifnet
 pseudo-device pair: ifnet, ether
@@ -794,6 +795,8 @@ file net/if_ethersubr.c			ether			needs-flag
 file net/if_etherip.c			etherip			needs-flag
 file net/if_spppsubr.c			sppp
 file net/if_loop.c			loop
+file net/if_kiss.c			kiss
+file net/kiss_tty.c			kiss			needs-flag
 file net/if_media.c			ifmedia
 file net/if_ppp.c			ppp			needs-count
 file net/ppp_tty.c			ppp
