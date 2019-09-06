@@ -1005,6 +1005,9 @@ ttyprt(struct itty *tp)
 	case ENDRUNDISC:
 		(void)printf("endrun\n");
 		break;
+	case KISSDISC:
+		(void)printf("kiss\n");
+		break;
 	default:
 		(void)printf("%d\n", tp->t_line);
 		break;
