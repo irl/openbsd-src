@@ -1,0 +1,54 @@
+.Dd September 7 2019
+.Dt ICLCD 8
+.Os
+.Sh NAME
+.Nm iclcd
+.Nd identification compliant with license conditions daemon
+.Sh SYNOPSIS
+.Nm
+.Op Fl i Ar interface
+.Sh DESCRIPTION
+.Nm
+sends raw Ethernet frames on the specified interface using Ethertype 0x4400
+containing the contents of
+.Pa /etc/mycallsign
+up to either the first newline or to the end of the file.
+.Pp
+.Nm
+is usually started at boot time, and can be enabled by
+setting the following in
+.Pa /etc/rc.conf.local :
+.Pp
+.Dl iclcd_flags=\&"\&"
+.Pp
+See
+.Xr rc 8
+and
+.Xr rc.conf 8
+for more information on the boot process
+and enabling daemons.
+.Sh OPTIONS
+.Bl -tag -width Ds
+.It Fl i Ar interface
+Interface name to broadcast ident frames (default: kiss0).
+.Sh PROTOCOL DETAILS
+The first byte of the Ethernet payload contains the version number of the iclcd
+protocol, which currently is zero. The remainder of the packet contains the
+callsign of the transmitting station encoded as
+.Xr ascii 7
+text.
+.Sh DISCLAIMER
+This may not be enough to comply with your local laws regarding identification
+of amateur radio transmissions. This manual page is not legal advice.
+.Sh CAVEATS
+It is not currently possible to broadcast identification on multiple interfaces
+with a single instance. It is however possible to manually start multiple
+instances.
+.Sh SEE ALSO
+.Xr mycallsign 5 ,
+.Xr kiss 4
+.Sh AUTHORS
+The
+.Nm
+daemon was written for the HamBSD project by Iain R. Learmonth for the public
+domain.
