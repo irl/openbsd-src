@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <syslog.h>
 #include <stdarg.h>
+#include <signal.h>
 
 #include <sys/times.h>
 #include <sys/time.h>
