@@ -8,7 +8,6 @@
  * TODO:
  *
  * - check for root euid
- * - actually fork off and be a daemon
  * - allow sleep duration to be customisable
  */
 
@@ -135,8 +134,8 @@ openbpf(char *interface)
 void
 daemonize()
 {
-	int i, lfp;
-	char str[10];
+	int i;
+	// TODO: should this use daemon(3) instead? maybe it cuts this down
 	if (getppid() == 1)
 		return; /* already a daemon */
 	i = fork();
@@ -200,6 +199,8 @@ main(int argc, char **argv)
 			syslog(LOG_DAEMON | LOG_ERR,
 			    "failure reason: %m");
 		}
-		while ((unslept = sleep(60)) != 0);
+		unslept = 60;
+		while (unslept > 0)
+			unslept = sleep(unslept);
 	}
 }
