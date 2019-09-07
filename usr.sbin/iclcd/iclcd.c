@@ -160,7 +160,7 @@ daemonize()
 int
 main(int argc, char **argv)
 {
-	int bpf, daemonize, period;
+	int bpf, daemon, period;
 	char ch, *interface;
 
 	/* option defaults */
@@ -177,7 +177,7 @@ main(int argc, char **argv)
 			period = atoi(optarg);
 			break;
 		case 'D':
-			daemonize = 0;
+			daemon = 0;
 			break;
 		default:
 			usage();
@@ -191,7 +191,7 @@ main(int argc, char **argv)
 	if (geteuid())
 		fatal("need root privileges");
 
-	if (daemonize)
+	if (daemon)
 		daemonize();
 
 	if ((bpf = openbpf(interface)) == -1)
