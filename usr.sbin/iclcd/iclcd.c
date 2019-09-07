@@ -7,7 +7,6 @@
 /*
  * TODO:
  *
- * - check for root euid
  * - allow sleep duration to be customisable
  */
 
@@ -161,15 +160,24 @@ daemonize()
 int
 main(int argc, char **argv)
 {
-	int bpf;
+	int bpf, daemonize, period;
 	char ch, *interface;
 
+	/* option defaults */
+	daemonize = 1;
+	period = 60;
 	interface = "kiss0"; // default
 
-	while ((ch = getopt(argc, argv, "i:")) != -1) {
+	while ((ch = getopt(argc, argv, "i:p:D")) != -1) {
 		switch (ch) {
 		case 'i':
 			interface = optarg;
+			break;
+		case 'p':
+			period = atoi(optarg);
+			break;
+		case 'D':
+			daemonize = 0;
 			break;
 		default:
 			usage();
@@ -179,7 +187,12 @@ main(int argc, char **argv)
 	argc -= optind;
 	argv += optind;
 
-	daemonize();
+	/* Check for root privileges. */
+	if (geteuid())
+		fatal("need root privileges");
+
+	if (daemonize)
+		daemonize();
 
 	if ((bpf = openbpf(interface)) == -1)
 		fatal("failed to open bpf interface");
@@ -199,7 +212,7 @@ main(int argc, char **argv)
 			syslog(LOG_DAEMON | LOG_ERR,
 			    "failure reason: %m");
 		}
-		unslept = 60;
+		unslept = period;
 		while (unslept > 0)
 			unslept = sleep(unslept);
 	}
