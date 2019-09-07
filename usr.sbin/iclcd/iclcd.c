@@ -164,7 +164,7 @@ main(int argc, char **argv)
 	char ch, *interface;
 
 	/* option defaults */
-	daemonize = 1;
+	daemon = 1;
 	period = 60;
 	interface = "kiss0"; // default
 
