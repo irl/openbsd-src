@@ -6,7 +6,9 @@
 .Nd identification compliant with license conditions daemon
 .Sh SYNOPSIS
 .Nm
+.Op Fl D
 .Op Fl i Ar interface
+.Op Fl p Ar period
 .Sh DESCRIPTION
 .Nm
 sends raw Ethernet frames on the specified interface using Ethertype 0x4400
@@ -29,8 +31,12 @@ for more information on the boot process
 and enabling daemons.
 .Sh OPTIONS
 .Bl -tag -width Ds
+.It Fl D
+Do not daemonize.
 .It Fl i Ar interface
 Interface name to broadcast ident frames (default: kiss0).
+.It Fl p Ar period
+Period in seconds between broadcasts (default: 60).
 .Sh PROTOCOL DETAILS
 The first byte of the Ethernet payload contains the version number of the iclcd
 protocol, which currently is zero. The remainder of the packet contains the

@@ -4,12 +4,6 @@
  * Written by Iain R. Learmonth <irl@fsfe.org> for the public domain.
  */
 
-/*
- * TODO:
- *
- * - allow sleep duration to be customisable
- */
-
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -41,7 +35,7 @@ usage(void)
 {
 	extern char *__progname;
 
-	fprintf(stderr, "usage: %s [-i interface]\n",
+	fprintf(stderr, "usage: %s [-D] [-i interface] [-p period]\n",
 	    __progname);
 	exit(1);
 }
