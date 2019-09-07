@@ -47,6 +47,21 @@ usage(void)
 	exit(1);
 }
 
+void
+signal_handler(int sig)
+{
+	switch(sig) {
+	case SIGHUP:
+		syslog(LOG_DAEMON | LOG_INFO, "caught hangup signal");
+		break;
+	case SIGTERM:
+		syslog(LOG_DAEMON | LOG_EMERG,
+		    "caught terminate signal, shutting down");
+		exit(0);
+		break;
+	}
+}
+
 char *
 mycallsign()
 {
@@ -116,6 +131,33 @@ openbpf(char *interface)
 	return bpf;
 }
 
+void
+daemonize()
+{
+	int i, lfp;
+	char str[10];
+	if (getppid() == 1)
+		return; /* already a daemon */
+	i = fork();
+	if (i<0)
+		exit(1); /* fork error */
+	if (i>0)
+		exit(0); /* parent exits */
+	/* child (daemon) continues */
+	setsid(); /* obtain a new process group */
+	for (i = getdtablesize(); i >= 0; --i)
+		close(i); /* close all descriptors */
+	i = open("/dev/null", O_RDWR);
+	dup(i);
+	dup(i); /* handle standard I/O */
+	signal(SIGCHLD, SIG_IGN); /* ignore child */
+	signal(SIGTSTP, SIG_IGN); /* ignore tty signals */
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGHUP, signal_handler); /* catch hangup signal */
+	signal(SIGTERM, signal_handler); /* catch kill signal */
+}
+
 int
 main(int argc, char **argv)
 {
@@ -136,6 +178,8 @@ main(int argc, char **argv)
 	}
 	argc -= optind;
 	argv += optind;
+
+	daemonize();
 
 	if ((bpf = openbpf(interface)) == -1)
 		fatal("failed to open bpf interface");
